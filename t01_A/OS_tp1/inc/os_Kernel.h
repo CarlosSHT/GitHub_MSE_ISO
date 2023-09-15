@@ -50,6 +50,7 @@ typedef struct
 
 
 
+void osInit(void);
 //Inicialización del stack frame para la primera vez que esa tarea es llamada.
 void osTaskCreate(osTaskObj *task, void* func_cb, void *arg);
 
