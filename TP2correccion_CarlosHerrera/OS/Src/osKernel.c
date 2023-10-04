@@ -147,23 +147,23 @@ void osDelay(const uint32_t tick)
 			// Actualiza la tarea de Running a Blocked
 			TaskFSMstate(&(running_task->state), running_task->active_block, running_task->active_terminate);
 
-//		    scheduler();
-//		    /*
-//		     * Set up bit corresponding exception PendSV
-//		     */
-//		    SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
-//
-//		    /*
-//		     * Instruction Synchronization Barrier; flushes the pipeline and ensures that
-//		     * all previous instructions are completed before executing new instructions
-//		     */
-//		    __ISB();
-//
-//		    /*
-//		     * Data Synchronization Barrier; ensures that all memory accesses are
-//		     * completed before next instruction is executed
-//		     */
-//		    __DSB();
+		    scheduler();
+		    /*
+		     * Set up bit corresponding exception PendSV
+		     */
+		    SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+
+		    /*
+		     * Instruction Synchronization Barrier; flushes the pipeline and ensures that
+		     * all previous instructions are completed before executing new instructions
+		     */
+		    __ISB();
+
+		    /*
+		     * Data Synchronization Barrier; ensures that all memory accesses are
+		     * completed before next instruction is executed
+		     */
+		    __DSB();
 		}
 
 
