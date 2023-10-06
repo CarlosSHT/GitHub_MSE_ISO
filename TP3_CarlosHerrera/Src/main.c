@@ -193,6 +193,7 @@ void SystemClock_Config(void)
 static void task1(void)
 {
 	uint8_t tempbuffer;
+	bool_t auxflag=true;
 //    uint32_t i = 0;
     osSemaphoreTake(&osSemaphore1);
     osSemaphoreTake(&osSemaphore1);
@@ -202,8 +203,11 @@ static void task1(void)
         vt1++;
         osDelay(100);
         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-        osQueueSend(&osQueue1, &vt1, 0);
-//        osQueueReceive(&osQueue1, (void*) &tempbuffer, 0);
+//        osQueueSend(&osQueue1, &vt1, 0);
+        if (auxflag) {
+            osQueueReceive(&osQueue1, (void*) &tempbuffer, 6000);
+            auxflag=false;
+		}
     }
 }
 
@@ -227,10 +231,10 @@ static void task3(void)
     while(1)
     {
     	vt3++;
-        osDelay(4000);
-        for (int var = 0; var < 5; ++var) {
-            osQueueReceive(&osQueue1, &buffer_queue[var], 0);
-		}
+//        osDelay(4000);
+//        for (int var = 0; var < 5; ++var) {
+//            osQueueReceive(&osQueue1, &buffer_queue[var], 0);
+//		}
 //        HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
     }
 }

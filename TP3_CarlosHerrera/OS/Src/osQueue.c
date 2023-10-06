@@ -85,7 +85,6 @@ bool osQueueInit(osQueueObject* queue, const uint32_t dataSize)
 	queue->index_fill = 0;
 	queue->index_get = 0;
 	queue->queue_ptr = ptr_queue;
-	queue->timeout = 0;
 	queue->data_size = dataSize;
 
 	return true;
@@ -114,9 +113,10 @@ void osQueueSend(osQueueObject* queue, const void* data, const uint32_t timeout)
 		if (queue->index_fill >= MAX_SIZE_QUEUE) {
 			queue->index_fill = 0;
 		}
-	} else {	// La tarea es bloqueada si esta lleno la cola de elementos
-		task_block = osGetCurrentTask();
-		osBlockTask(task_block);
+	} else {	// La tarea es bloqueada por un tiempo si esta lleno la cola de elementos
+//		task_block = osGetCurrentTask();
+//		osBlockTask(task_block);
+		osDelay(timeout);
 	}
 }
 
@@ -135,9 +135,10 @@ void osQueueReceive(osQueueObject* queue, void* buffer, const uint32_t timeout)
 			flag_block = false;
 	}
 
-	if (flag_block) {	// Bloquea la tarea si no hay datos en la lista de elementos de la cola
-		task_block = osGetCurrentTask();
-		osBlockTask(task_block);
+	if (flag_block) {	// Bloquea la tarea por un tiempo si no hay datos en la lista de elementos de la cola
+//		task_block = osGetCurrentTask();
+//		osBlockTask(task_block);
+		osDelay(timeout);
 	}
 	else {
 		// Realiza una copia del elemento en la cola de puntero a puntero y luego libera la memoria
