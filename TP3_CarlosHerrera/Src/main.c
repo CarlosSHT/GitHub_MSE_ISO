@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "osKernel.h"
 #include "osSemaphore.h"
+#include "osQueue.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,8 +59,12 @@ uint32_t vt4 = 0;
 uint32_t vt5 = 0;
 uint32_t vtick = 0;
 uint32_t vidle = 0;
+uint32_t buffer_queue[10];
 
 osSemaphoreObject osSemaphore1;
+
+
+osQueueObject osQueue1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -119,6 +124,9 @@ int main(void)
   osTaskCreate(&osTask5, OS_LOW_PRIORITY, task5);
 
   osSemaphoreInit(&osSemaphore1, 1, 1);
+
+  osQueueInit(&osQueue1,sizeof(uint32_t));
+
 
   osStart();
   /* USER CODE END 2 */
@@ -184,6 +192,7 @@ void SystemClock_Config(void)
 
 static void task1(void)
 {
+	uint8_t tempbuffer;
 //    uint32_t i = 0;
     osSemaphoreTake(&osSemaphore1);
     osSemaphoreTake(&osSemaphore1);
@@ -193,6 +202,8 @@ static void task1(void)
         vt1++;
         osDelay(100);
         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        osQueueSend(&osQueue1, &vt1, 0);
+//        osQueueReceive(&osQueue1, (void*) &tempbuffer, 0);
     }
 }
 
@@ -203,7 +214,7 @@ static void task2(void)
     while(1)
     {
     	vt2++;
-        osDelay(3000);
+        osDelay(1000);
         HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
         osSemaphoreGive(&osSemaphore1);
     }
@@ -216,7 +227,10 @@ static void task3(void)
     while(1)
     {
     	vt3++;
-//        osDelay(100);
+        osDelay(4000);
+        for (int var = 0; var < 5; ++var) {
+            osQueueReceive(&osQueue1, &buffer_queue[var], 0);
+		}
 //        HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
     }
 }

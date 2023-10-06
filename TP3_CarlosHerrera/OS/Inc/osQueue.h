@@ -35,16 +35,24 @@ extern "C" {
 /******************************************************************************
 * Public defines
 *******************************************************************************/
-#define MAX_SIZE_QUEUE  128     // Maximum buffer size of the queue
+//#define MAX_SIZE_QUEUE  128     // Maximum buffer size of the queue
+#define MAX_SIZE_QUEUE  5     // Maximum buffer size of the queue
 
 /******************************************************************************
 * Exported Typedefs
 *******************************************************************************/
+typedef bool bool_t;
 /**
  * @brief Data structure queue.
  */
 typedef struct
 {
+	void*		data_ptrs[MAX_SIZE_QUEUE];	// Lista de punteros de datos en la cola
+	void*		queue_ptr;					// Puntero inicial de la cola
+	uint8_t		index_fill;					// Indice de llenado circular
+	uint8_t		index_get;					// Indice de vaciado circular
+	uint32_t	timeout;					// Tiempo de espera
+	uint32_t	data_size;					// tamaño en bytes del dato a encolar
 }osQueueObject;
 
 /******************************************************************************
