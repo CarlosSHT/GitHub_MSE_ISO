@@ -172,6 +172,8 @@ void osIRQHandler(osIRQnType irqType)
 	}
 
 	NVIC_ClearPendingIRQ(irqType);			/// Limpia las interrupciones pendientes
+											///	NO ES SUFICIENTE el usuario debe limpiar las interrupciones
+											/// desde la funcion callback
 
 	if(IS_inInterrupt())					/// Pregunta si se encuentra en una interrupción
 	{
